@@ -1,22 +1,14 @@
 import java.util.Date;
 
 public class Reservas {
-    String id;
-    Date dataInicial;
-    Date dataFinal;
+    private String hotel;
+    private Date dataInicial;
+    private Date dataFinal;
 
-    public Reservas(String id, Date dataInicial, Date dataFinal) {
-        this.id = id;
+    public Reservas(String hotel, Date dataInicial, Date dataFinal) {
+        this.hotel = hotel;
         this.dataInicial = dataInicial;
         this.dataFinal = dataFinal;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Date getDataInicial() {
