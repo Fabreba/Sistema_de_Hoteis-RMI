@@ -2,10 +2,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class HotelServer extends UnicastRemoteObject implements IHotelServer {
     public List<Hotel> hoteis = new ArrayList<>();
@@ -14,14 +11,19 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
         super();
     }
 
-    public static void main(String[] args) {
+    public void main(String[] args) {
         try{
             HotelServer server = new HotelServer();
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind("Server", server);
             System.out.println("Servidor Hotelaria iniciado");
+            Scanner scanner = new Scanner(System.in);
             while(true){
-
+                //tentando colocar
+                String nome = scanner.next();
+                int qtdQuartos = scanner.nextInt();
+                String credenciais = scanner.next();
+                adicionarHotel(nome, qtdQuartos, credenciais);
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -29,10 +31,10 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
     }
 
 
-//    protected void adicionarHotel(String nome, int qtdQuartos, String credenciais) throws RemoteException {
-//        Hotel hotel = new Hotel(nome,qtdQuartos, credenciais);
-//        hoteis.add(hotel);
-//    }
+    private void adicionarHotel(String nome, int qtdQuartos, String credenciais) throws RemoteException {
+        Hotel hotel = new Hotel(nome,qtdQuartos, credenciais);
+        hoteis.add(hotel);
+    }
 //
 //    protected void removerHotel(String nome, String credenciais) throws RemoteException {
 //        Iterator<Hotel> iterator = hoteis.iterator();
@@ -48,13 +50,19 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
 //    }
 
     @Override
-    public void adicionarReserva(String hotel, Date dataInicial, Date dataFinal) throws RemoteException {
+    public String adicionarReserva(String hotel, Date dataInicial, Date dataFinal) throws RemoteException {
         Iterator<Hotel> iterator = hoteis.iterator();
         while (iterator.hasNext()){
             Hotel hotelAtual = iterator.next();
             if(hotelAtual.getNome().equals(hotel)){
-
+                Reservas reserva = new Reservas(hotel, dataInicial, dataFinal);
+                hotelAtual.setReservas(reserva);
+                return "Reserva feita: de " + reserva.dataInicial.toString() + " para " + reserva.dataFinal.toString();
+            }
+            else{
+                return "Hotel não encontrado";
             }
         }
+        return "Algo deu errado";
     }
 }

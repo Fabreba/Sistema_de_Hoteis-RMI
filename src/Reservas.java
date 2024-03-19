@@ -5,6 +5,12 @@ public class Reservas {
     Date dataInicial;
     Date dataFinal;
 
+    public Reservas(String id, Date dataInicial, Date dataFinal) {
+        this.id = id;
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
+    }
+
     public String getId() {
         return id;
     }

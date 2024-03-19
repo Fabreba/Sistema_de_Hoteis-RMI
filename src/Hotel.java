@@ -5,7 +5,7 @@ public class Hotel {
     private String nome;
     private int qtdQuartos;
     private String credenciais;
-    private List<Date> datasDisponiveis;
+    private List<Reservas> reservas;
 
     public String getCredenciais() {
         return credenciais;
@@ -44,14 +44,11 @@ public class Hotel {
         this.qtdQuartos -= quantidade;
     }
 
-
-    public List<Date> getDatasDisponiveis() {
-        return datasDisponiveis;
+    public List<Reservas> getReservas() {
+        return reservas;
     }
 
-
-
-    public void setDatasDisponiveis(Date dataInicial, Date dataFinal) {
-        this.datasDisponiveis.add((dataInicial,dataFinal));
+    public void setReservas(Reservas reserva) {
+        this.reservas.add(reserva);
     }
 }
