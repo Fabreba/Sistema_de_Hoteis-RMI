@@ -7,7 +7,7 @@ public interface IHotelServer extends Remote {
     
     // String consultarDisponibilidade(String nomeHotel, Date dataInicial, Date dataFinal) throws RemoteException;
 
-    // String modificarReserva(String nomeHotel, Date dataInicial, Date novaDataInicial, Date novaDataFinal);
+    String modificarReserva(String nomeHotel, int quartoAtual, int novoQuarto) throws RemoteException;
 
-    // String removerReserva(String nomeDoHotel, Date dataInicial);
+    String removerReserva(String nomeDoHotel, int numeroQuarto) throws RemoteException;
 }

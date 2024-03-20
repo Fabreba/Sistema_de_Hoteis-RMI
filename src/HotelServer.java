@@ -19,6 +19,9 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
             registry.rebind("Server", server);
             System.out.println("Servidor Hotelaria iniciado");
 
+            
+            
+            
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 System.out.println(
@@ -199,4 +202,52 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
         return "Quarto ou Hotel não encontrado.";
     }
     
+    @Override
+    public String modificarReserva(String nomeHotel, int quartoAtual, int novoQuarto) {
+        for (Hotel hotel : hoteis) {
+            if (hotel.getNome().equals(nomeHotel)) {
+                for (Quarto quarto : hotel.getQuartos()) {
+                    if (quarto.getNumero() == quartoAtual) {
+                        if (!quarto.getStatus()) {
+                            for (Quarto novo : hotel.getQuartos()) {
+                                if (novo.getNumero() == novoQuarto) {
+                                    if (novo.getStatus()) {
+                                        quarto.setStatus(true);
+                                        novo.setStatus(false);
+                                        return "Reserva modificada com sucesso.";
+                                    } else {
+                                        return "O novo quarto já está reservado.";
+                                    }
+                                }
+                            }
+                            return "Novo quarto não encontrado.";
+                        } else {
+                            return "O quarto atual não está reservado.";
+                        }
+                    }
+                }
+                return "Quarto atual não encontrado.";
+            }
+        }
+        return "Hotel não encontrado.";
+    }
+
+    @Override
+    public String removerReserva(String nomeDoHotel, int numeroQuarto){
+        for(Hotel h : hoteis){
+            if(h.getNome().equals(nomeDoHotel)){
+                for (var q : h.getQuartos()){
+                    if(q.getNumero() == numeroQuarto){
+                        if(q.getStatus()){
+                            q.setStatus(true);
+                            return "Reserva removida com sucesso.";
+                        } else {
+                            return "O quarto já está disponível.";
+                        }
+                    }
+                }
+            }
+        }
+        return "Quarto ou Hotel não encontrado.";
+    }
 }

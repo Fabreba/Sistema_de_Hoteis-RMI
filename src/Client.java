@@ -22,13 +22,13 @@ public class Client {
 
                 switch (opcao) {
                     case 1:
-                        //consultarDisponibilidade(scanner);
+                        consultarDisponibilidade(scanner);
                         break;
                     case 2:
                         fazerReserva(scanner);
                         break;
                     case 3:
-                        //modificarReserva(scanner);
+                        modificarReserva(scanner);
                         break;
                     case 4:
                         cancelarReserva(scanner);
@@ -72,19 +72,13 @@ public class Client {
     private static void modificarReserva(Scanner scanner) throws Exception {
         System.out.println("Digite o nome do hotel:");
         String nomeDoHotel = scanner.nextLine();
-        System.out.println("Digite a data inicial da reserva a ser modificada (Formato: yyyy-MM-dd HH:mm:ss):");
-        String dataInicialStr = scanner.nextLine();
-        System.out.println("Digite a nova data inicial da reserva (Formato: yyyy-MM-dd HH:mm:ss):");
-        String novaDataInicialStr = scanner.nextLine();
-        System.out.println("Digite a nova data final da reserva (Formato: yyyy-MM-dd HH:mm:ss):");
-        String novaDataFinalStr = scanner.nextLine();
+        System.out.println("Digite o número do quarto atual da reserva: ");
+        int quartoAtual = scanner.nextInt();
+        System.out.println("Digite o número do novo quarto da reserva:");
+        int quartoNovo = scanner.nextInt();
 
-        Date dataInicial = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dataInicialStr);
-        Date novaDataInicial = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(novaDataInicialStr);
-        Date novaDataFinal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(novaDataFinalStr);
-
-        // resultado = server.modificarReserva(nomeDoHotel, dataInicial, novaDataInicial, novaDataFinal);
-        //System.out.println(resultado);
+        String resultado = server.modificarReserva(nomeDoHotel, quartoAtual, quartoNovo);
+        System.out.println(resultado);
     }
 
     private static void cancelarReserva(Scanner scanner) throws Exception {
