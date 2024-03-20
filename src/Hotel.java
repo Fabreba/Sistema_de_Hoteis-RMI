@@ -24,22 +24,4 @@ public class Hotel {
         return credenciais;
     }
 
-    public boolean verificarDisponibilidade(Date dataInicial, Date dataFinal) {
-        // Lógica para verificar a disponibilidade de quartos
-        return true; // Simplesmente retornando true para fins de exemplo
-    }
-
-    public boolean modificarReserva(Date dataInicial, Date novaDataInicial, Date novaDataFinal) {
-        for (Reservas reserva : reservas) {
-            
-        }
-        return false;
-    }
-
-    public boolean removerReserva(Date dataInicial) {
-        for (Reservas reserva : reservas) {
-            
-        }
-        return false;
-    }
 }

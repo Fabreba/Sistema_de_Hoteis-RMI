@@ -35,52 +35,32 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
                         String nomeHotel = scanner.nextLine();
                         System.out.println("Digite as credenciais do hotel:");
                         String credenciais = scanner.nextLine();
-                        server.adicionarHotel(nomeHotel, credenciais);
+                        server.adicionarHotelAdmin(nomeHotel, credenciais);
                         break;
                     case 2:
                         System.out.println("Digite o nome do hotel:");
                         String nomeDoHotel = scanner.nextLine();
-                        System.out.println("Digite a data inicial (Formato: yyyy-MM-dd HH:mm:ss):");
-                        String dataInicialStr = scanner.nextLine();
-                        System.out.println("Digite a data final (Formato: yyyy-MM-dd HH:mm:ss):");
-                        String dataFinalStr = scanner.nextLine();
 
-                        Date dataInicial = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dataInicialStr);
-                        Date dataFinal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dataFinalStr);
-
-                        String disponibilidade = server.consultarDisponibilidade(nomeDoHotel, dataInicial, dataFinal);
+                        String disponibilidade = server.consultarDisponibilidade(nomeDoHotel);
                         System.out.println(disponibilidade);
                         break;
                     case 3:
                         System.out.println("Digite o nome do hotel:");
-                        String nomeHotelModificar = scanner.nextLine();
-                        System.out.println("Digite a data inicial da reserva (Formato: yyyy-MM-dd HH:mm:ss):");
-                        String dataInicialModificar = scanner.nextLine();
-                        System.out.println("Digite a nova data inicial (Formato: yyyy-MM-dd HH:mm:ss):");
-                        String novaDataInicialModificar = scanner.nextLine();
-                        System.out.println("Digite a nova data final (Formato: yyyy-MM-dd HH:mm:ss):");
-                        String novaDataFinalModificar = scanner.nextLine();
+                        String nome = scanner.nextLine();
+                        System.out.println("Digite o número do quarto atual da reserva: ");
+                        int quartoAtual = scanner.nextInt();
+                        System.out.println("Digite o número do novo quarto da reserva:");
+                        int quartoNovo = scanner.nextInt();
 
-                        Date dataIniMod = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dataInicialModificar);
-                        Date novaDataIniMod = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                                .parse(novaDataInicialModificar);
-                        Date novaDataFinalMod = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                                .parse(novaDataFinalModificar);
-
-                        String resultadoModificacao = server.modificarReserva(nomeHotelModificar, dataIniMod,
-                                novaDataIniMod, novaDataFinalMod);
-                        System.out.println(resultadoModificacao);
+                        String resultado = server.modificarReserva(nome, quartoAtual, quartoNovo);
+                        System.out.println(resultado);
                         break;
                     case 4:
                         System.out.println("Digite o nome do hotel:");
                         String nomeHotelRemoverReserva = scanner.nextLine();
-                        System.out.println("Digite a data inicial da reserva (Formato: yyyy-MM-dd HH:mm:ss):");
-                        String dataInicialRemoverReserva = scanner.nextLine();
-
-                        Date dataIniRemReserva = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                                .parse(dataInicialRemoverReserva);
-
-                        String resultadoRemocao = server.removerReserva(nomeHotelRemoverReserva, dataIniRemReserva);
+                        System.out.println("Digiteo número do quarto");
+                        int numeroQuarto = scanner.nextInt();
+                        String resultadoRemocao = server.removerReservaAdmin(nomeHotelRemoverReserva, numeroQuarto);
                         System.out.println(resultadoRemocao);
                         break;
                     case 5:
@@ -88,7 +68,7 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
                         String nomeHotelRemover = scanner.nextLine();
                         System.out.println("Digite o credenciais do hotel que deseja remover:");
                         String credenciaisHotel = scanner.nextLine();
-                        server.removerHotel(nomeHotelRemover, credenciaisHotel);
+                        server.removerHotelAdmin(nomeHotelRemover, credenciaisHotel);
                         break;
                     case 6:
                         System.out.println("Encerrando servidor...");
@@ -104,10 +84,24 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
         }
     }
 
-    private void adicionarHotel(String nome, String credenciais) throws RemoteException {
+    private String consultarDisponibilidade(String nomeDoHotel) {
+        for (Hotel hotel : hoteis) {
+            if (hotel.getNome().equals(nomeDoHotel)) {
+                for (Quarto quarto : hotel.getQuartos()) {
+                    if (quarto.getStatus()) {
+                        System.out.println("Número do quarto não reservado: " + quarto.getNumero());
+                        break;
+                    }
+                }
+            }
+        }
+        return "Hotel não encontrado";
+    }
+
+    private void adicionarHotelAdmin(String nome, String credenciais) throws RemoteException {
         try {
             List<Quarto> quartos = new ArrayList<>();
-            int numeroQuarto = 0;
+            int numeroQuarto;
             System.out.println("Agora preciso que você adicione os quartos do hotel.");
             Scanner scanner = new Scanner(System.in);
             while (true) {
@@ -130,7 +124,7 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
         }
     }
     
-    private void removerHotel(String nomeHotel, String credenciais) {
+    private void removerHotelAdmin(String nomeHotel, String credenciais) {
         Iterator<Hotel> iterator = hoteis.iterator();
         while (iterator.hasNext()) {
             Hotel hotel = iterator.next();
@@ -143,44 +137,53 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
         System.out.println("Hotel não encontrado");
     }
 
-    public String modificarReserva(String nomeHotel, Date dataInicial, Date novaDataInicial, Date novaDataFinal) {
+    private String modificarReservaAdmin(String nomeHotel, int quartoAtual, int novoQuarto) {
         for (Hotel hotel : hoteis) {
             if (hotel.getNome().equals(nomeHotel)) {
-                if (hotel.modificarReserva(dataInicial, novaDataInicial, novaDataFinal)) {
-                    return "Reserva modificada com sucesso.";
-                } else {
-                    return "Não foi possível modificar a reserva.";
+                for (Quarto quarto : hotel.getQuartos()) {
+                    if (quarto.getNumero() == quartoAtual) {
+                        if (!quarto.getStatus()) {
+                            for (Quarto novo : hotel.getQuartos()) {
+                                if (novo.getNumero() == novoQuarto) {
+                                    if (novo.getStatus()) {
+                                        quarto.setStatus(true);
+                                        novo.setStatus(false);
+                                        return "Reserva modificada com sucesso.";
+                                    } else {
+                                        return "O novo quarto já está reservado.";
+                                    }
+                                }
+                            }
+                            return "Novo quarto não encontrado.";
+                        } else {
+                            return "O quarto atual não está reservado.";
+                        }
+                    }
                 }
+                return "Quarto atual não encontrado.";
             }
         }
-        return "Hotel não encontrado";
+        return "Hotel não encontrado.";
     }
 
-    public String removerReserva(String nomeHotel, Date dataInicial) {
-        for (Hotel hotel : hoteis) {
-            if (hotel.getNome().equals(nomeHotel)) {
-                if (hotel.removerReserva(dataInicial)) {
-                    return "Reserva removida com sucesso.";
-                } else {
-                    return "Não foi possível remover a reserva.";
+    private String removerReservaAdmin(String nomeDoHotel, int numeroQuarto){
+        for(Hotel h : hoteis){
+            if(h.getNome().equals(nomeDoHotel)){
+                for (var q : h.getQuartos()){
+                    if(q.getNumero() == numeroQuarto){
+                        if(!q.getStatus()){
+                            q.setStatus(true);
+                            return "Reserva removida com sucesso.";
+                        } else {
+                            return "Nenhuma reserva a ser removida";
+                        }
+                    }
                 }
             }
         }
-        return "Hotel não encontrado";
+        return "Hotel ou Reserva não encontrado.";
     }
 
-    public String consultarDisponibilidade(String nomeHotel, Date dataInicial, Date dataFinal) {
-        for (Hotel hotel : hoteis) {
-            if (hotel.getNome().equals(nomeHotel)) {
-                if (hotel.verificarDisponibilidade(dataInicial, dataFinal)) {
-                    return "Quartos disponíveis para o período selecionado.";
-                } else {
-                    return "Quartos não disponíveis para o período selecionado.";
-                }
-            }
-        }
-        return "Hotel não encontrado";
-    }
 
     @Override
     public String adicionarReserva(String hotel, int numeroQuarto) throws RemoteException {
@@ -238,16 +241,16 @@ public class HotelServer extends UnicastRemoteObject implements IHotelServer {
             if(h.getNome().equals(nomeDoHotel)){
                 for (var q : h.getQuartos()){
                     if(q.getNumero() == numeroQuarto){
-                        if(q.getStatus()){
+                        if(!q.getStatus()){
                             q.setStatus(true);
                             return "Reserva removida com sucesso.";
                         } else {
-                            return "O quarto já está disponível.";
+                            return "Nenhuma reserva a ser removida";
                         }
                     }
                 }
             }
         }
-        return "Quarto ou Hotel não encontrado.";
+        return "Hotel ou Reserva não encontrado.";
     }
 }

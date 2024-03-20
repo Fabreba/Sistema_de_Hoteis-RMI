@@ -84,12 +84,9 @@ public class Client {
     private static void cancelarReserva(Scanner scanner) throws Exception {
         System.out.println("Digite o nome do hotel:");
         String nomeDoHotel = scanner.nextLine();
-        System.out.println("Digite a data inicial da reserva a ser cancelada (Formato: yyyy-MM-dd HH:mm:ss):");
-        String dataInicialStr = scanner.nextLine();
-
-        Date dataInicial = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dataInicialStr);
-
-        //String resultado = server.removerReserva(nomeDoHotel, dataInicial);
-        //System.out.println(resultado);
+        System.out.println("Digite o número do Quarto");
+        int numeroQuarto = scanner.nextInt();
+        String resultado = server.removerReserva(nomeDoHotel, numeroQuarto);
+        System.out.println(resultado);
     }
 }
