@@ -1,29 +1,23 @@
 import java.util.Date;
+import java.util.UUID;
 
-public class Reservas {
-    private String hotel;
-    private Date dataInicial;
-    private Date dataFinal;
+public class Reservas extends Quarto{
 
-    public Reservas(String hotel, Date dataInicial, Date dataFinal) {
-        this.hotel = hotel;
-        this.dataInicial = dataInicial;
-        this.dataFinal = dataFinal;
+    private UUID uuid = null;
+    public Reservas(String nome, boolean status) {
+        super(nome, status);
     }
 
-    public Date getDataInicial() {
-        return dataInicial;
+    public UUID reservar(){
+        if(!status) return uuid;
+        
+        UUID uuid = UUID.randomUUID();
+        String reservaId = uuid.toString();
+        System.out.println("Reserva feita com sucesso! ID: " + reservaId);
+        return uuid;
     }
 
-    public void setDataInicial(Date dataInicial) {
-        this.dataInicial = dataInicial;
-    }
 
-    public Date getDataFinal() {
-        return dataFinal;
-    }
 
-    public void setDataFinal(Date dataFinal) {
-        this.dataFinal = dataFinal;
-    }
+    
 }

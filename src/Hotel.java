@@ -4,19 +4,24 @@ import java.util.List;
 
 public class Hotel {
     private String nome;
-    private int qtdQuartos;
+    private List<Quarto> quartos;
     private String credenciais;
-    private List<Reservas> reservas;
+    private List<Reservas> reservas = new ArrayList<>();
 
-    public Hotel(String nome, int qtdQuartos, String credenciais) {
+    public Hotel(String nome, String credenciais, List<Quarto> quartos) {
         this.nome = nome;
-        this.qtdQuartos = qtdQuartos;
         this.credenciais = credenciais;
-        this.reservas = new ArrayList<>();
+        this.quartos = quartos;
     }
 
     public String getNome() {
         return nome;
+    }
+    public List<Quarto> getQuartos() {
+        return this.quartos;
+    }
+    public String getCredenciais(){
+        return credenciais;
     }
 
     public boolean verificarDisponibilidade(Date dataInicial, Date dataFinal) {
@@ -26,21 +31,14 @@ public class Hotel {
 
     public boolean modificarReserva(Date dataInicial, Date novaDataInicial, Date novaDataFinal) {
         for (Reservas reserva : reservas) {
-            if (reserva.getDataInicial().equals(dataInicial)) {
-                reserva.setDataInicial(novaDataInicial);
-                reserva.setDataFinal(novaDataFinal);
-                return true;
-            }
+            
         }
         return false;
     }
 
     public boolean removerReserva(Date dataInicial) {
         for (Reservas reserva : reservas) {
-            if (reserva.getDataInicial().equals(dataInicial)) {
-                reservas.remove(reserva);
-                return true;
-            }
+            
         }
         return false;
     }
