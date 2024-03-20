@@ -14,7 +14,20 @@ Para executar o servidor do sistema de reservas de hotel, siga estas etapas:
 
 1. Certifique-se de ter o Java Runtime Environment (JRE) instalado em sua máquina.
 2. Compile o código-fonte usando um compilador Java (javac).
-3. Execute o servidor RMI utilizando o comando .
+3. Execute o servidor RMI utilizando o comando.
+4. Compilar os arquivos Java
+```bash
+javac *.java
+```
+5. Executar o servidor
+```bash
+java HotelServer
+```
+6. Executar o client
+```bash
+
+java Client
+```
 
 ## Estrutura do Projeto
 
@@ -37,4 +50,5 @@ Após iniciar o servidor, o sistema aguardará por comandos do administrador. Aq
     - Escolha a opção e forneça o nome do hotel para consultar a disponibilidade de quartos.
 3. Modificar uma Reserva:
     - Escolha a opção , informe o nome do hotel e os números dos quartos atual e desejado para modificar uma reserva existente.
+  
 
